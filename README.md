@@ -68,6 +68,7 @@ You can alternatively give a previously saved file to share the passphrases betw
 When you want to send encrypted msg to the channel you'll have several ways to launch the encryption dialog.
 Press `Alt-S` or click on the Shhlack extension icon (extension only) and you'll get:
 
+![image](https://user-images.githubusercontent.com/1196560/39006265-d8114e10-4402-11e8-873c-266c6be34a04.png)
 
 If there is more than one passphrase the dropdown menu will show a list of mnemonic keys and you'll be able to chose which passphrase use to encrypt the message.
 Alternatively you can also send a raw message without the fancy dialog.
