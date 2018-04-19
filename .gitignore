@@ -1,0 +1,11 @@
+node_modules/
+build/
+temp/
+tests/
+*.bak
+*.pem
+*.crx
+*.tgz
+*.zip
+test/
+old/

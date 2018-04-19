@@ -1,0 +1,21 @@
+{
+  "name": "shhlack",
+  "version": "1.0.0",
+  "description": "Just add this extension to your chrome and log in to your slack team",
+  "main": "build.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@mindedlab:stefano/shhlack.git"
+  },
+  "author": "Minded Security",
+  "license": "ISC",
+  "dependencies": {
+    "recursive-copy": "^2.0.9"
+  }
+}
