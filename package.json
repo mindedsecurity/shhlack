@@ -1,7 +1,7 @@
 {
   "name": "shhlack",
-  "version": "1.0.0",
-  "description": "Just add this extension to your chrome and log in to your slack team",
+  "version": "1.0.3",
+  "description": "Shhlack is an encryptor/decryptor or peer to peer messages in Slack.It relies on pre shared keys between the peers so only the peers with the right passphrase will be able to see the encrypted message.",
   "main": "build.js",
   "directories": {
     "test": "tests"
@@ -16,6 +16,5 @@
   "author": "Minded Security",
   "license": "ISC",
   "dependencies": {
-    "recursive-copy": "^2.0.9"
   }
 }
