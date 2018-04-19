@@ -1,9 +1,15 @@
 # Shhlack
 Shhlack is an encryptor/decryptor or peer to peer messages in Slack.
-It relies on pre shared keys between the peers so only the peers with the right passphrase will be able to see the encrypted message. Everyone else will see some garbage content like:
+It relies on pre shared keys between the peers so only the peers with the right passphrase will be able to see the encrypted message. 
+
+<img src="https://user-images.githubusercontent.com/1196560/39006967-ec14799e-4404-11e8-8ebc-cbf387c3806f.png" width="500">
+
+Everyone else will see some garbage content like:
+
 ```
-title@@@@BASE64ENCRYPTEDCONTENT####HMAC
+Sample Title@@@@BASE64ENCRYPTEDCONTENT####HMAC
 ```
+
 In order to facilitate search a title in clear text can be used.
 
 # Build
@@ -68,7 +74,7 @@ You can alternatively give a previously saved file to share the passphrases betw
 When you want to send encrypted msg to the channel you'll have several ways to launch the encryption dialog.
 Press `Alt-S` or click on the Shhlack extension icon (extension only) and you'll get:
 
-![image](https://user-images.githubusercontent.com/1196560/39006265-d8114e10-4402-11e8-873c-266c6be34a04.png)
+<img src="https://user-images.githubusercontent.com/1196560/39006265-d8114e10-4402-11e8-873c-266c6be34a04.png" width="250">
 
 If there is more than one passphrase the dropdown menu will show a list of mnemonic keys and you'll be able to chose which passphrase use to encrypt the message.
 Alternatively you can also send a raw message without the fancy dialog.
