@@ -58,6 +58,16 @@ function _____INJECT_____() {
         this.saveOnStorage();
       }
     },
+    getCurrentKey: function(key) {
+      if (this.currentKey != null) {
+        return this.currentKey;
+      }else if(this.getKeys().length>0){
+        this.setCurrentKey(this.getKeys()[0]);
+        return this.currentKey;
+      } else {
+        return null;
+      }
+    },
     getCurrentValue: function() {
       return this.get(this.currentKey)
     },
@@ -419,7 +429,7 @@ function _____INJECT_____() {
               var keyEl = qs("#shhlack_new_key");
               var valueEl = qs("#shhlack_new_value");
               passes.set(keyEl.value, valueEl.value);
-              if(passes.currentKey == null){
+              if(passes.getCurrentKey() == null){
                 passes.setCurrentKey(keyEl.value);
               }
               keyEl.value = '';
@@ -439,7 +449,7 @@ function _____INJECT_____() {
 
             datalist_key_el.addEventListener("change", function(ev) {
               var key = ev.target.value;
-              if (key === passes.currentKey) {
+              if (key === passes.getCurrentKey()) {
                 shhlack_default_key_checkbox.checked = true;
               } else {
                 shhlack_default_key_checkbox.checked = false;
@@ -671,12 +681,12 @@ function _____INJECT_____() {
     }
     var qs = targetEl.querySelector.bind(targetEl);
     var qsall = targetEl.querySelectorAll.bind(targetEl);
-    if(passes.currentKey == undefined || passes.getKeys().length===0){
+    if(passes.getCurrentKey() == undefined || passes.getKeys().length===0){
       alert("No passphrases in database, define at least one");
       setTimeout(function (){launchDialog(1)},2000);
     }
     var container_el = qs("#shhlack_container");
-    var currentKey = passes.currentKey;
+    var currentKey = passes.getCurrentKey();
     if (!container_el) {
       document.addEventListener('keyup', function(ev) {
         if (ev.altKey && ev.key === CHAR){
