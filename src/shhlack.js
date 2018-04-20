@@ -420,7 +420,7 @@ function _____INJECT_____() {
               var valueEl = qs("#shhlack_new_value");
               passes.set(keyEl.value, valueEl.value);
               if(passes.currentKey == null){
-                passes.currentKey = keyEl.value;
+                passes.setCurrentKey(keyEl.value);
               }
               keyEl.value = '';
               valueEl.value = '';
