@@ -88,6 +88,9 @@ function copyFolderRecursiveSync(source, target) {
 copyFolderRecursiveSync(SRC_EXTENSION_DIR,BUILD_DIR);
 copyFolderRecursiveSync(SRC_NATIVE_DIR,BUILD_DIR);
 
+copyFileSync(path.join(__dirname, "package.json"), BUILD_NATIVE_DIR);
+copyFileSync(path.join(__dirname, "README.md"), BUILD_NATIVE_DIR);
+copyFileSync(path.join(__dirname, "README.md"), BUILD_EXTENSION_DIR);
 
 fs.writeFileSync(path.join(BUILD_EXTENSION_DIR, "shhlack.js"), extension_template.replace(PLACEHOLDER, shhlack_patch));
 fs.writeFileSync(path.join(BUILD_NATIVE_DIR, "shhlack.js"), standalone_template.replace(PLACEHOLDER, shhlack_patch));
