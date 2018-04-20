@@ -1,6 +1,8 @@
 const DEBUG = true;
 var debug = DEBUG ? console.log.bind(console) : function() {};
-chrome.extension.onMessage.addListener(
+// added for FF compatibility
+var messageListener = chrome.extension.onMessage || chrome.runtime.onMessage 
+messageListener.addListener(
   function(msg) {
     switch (msg.action) {
       case 'createmessage':
