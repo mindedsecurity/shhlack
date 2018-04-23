@@ -259,6 +259,57 @@ function _____INJECT_____() {
     } else
       console.log("no slack TS.ui to patch");
   }
+
+
+  function addShhlackIcon() {
+    var html = `<style>
+  #shhlack_icon{
+      background:
+              url(data:image/webp;base64,UklGRvwDAABXRUJQVlA4TO8DAAAvH8AHEE2Yads2plr7soj+x/5UEs3CMBtJfS7A+dMdxmY5TEWysQ8JJNA/ow81bSQ5U52OP74cqteD6H8AABRHR6Fr+w9POmVebjnIuW3b2N4FzQdfbNtWmfHVSeukttOmzUin+hvpbVW2O9u27eR53o/PfSPHtrZje/bzPr/N2GZpu8wg1CYTyHhS2rbtVLad/Hi/95Za27aqPfPchz8qsgwt/L+MjI9MXHpghh6iqQBSUamAFFlmpkdXCiwABFi9Odm27bi8tLRFb23VRlpWdFRbVF5a9JqNb94EIACKohaTKEEmAnGNEyxhF8qMQ4QDAEIQhEw0YbZMuAYAwDMeAQCQWxacAAB20AKIRyKWAQBfyoAxAEAz1Ite/AbAXhj6ADAJDaILoYAvYUgGfGC+IcAwACpCMAOAYyiITRQAOkIQBoCXIrgEQFoI/gMgoAgCABAY8v/xBwB/i+A3AP4FIAaNACjDFoIbwD+kAqAYDYUwhyEAQAlaoDAqcISNIuiHsqKtCIJgzCXGnn1k4LRWhnrUKNUqrzueeb/muvaT58UtI1WIMzMm3gGB7Vta/V58NyQzqr0yqq00qq00qrUwsqE0IgrpiFGrSZ2pa5Lry49K/m7LGkJUTdI06p5LITlKXZX3H7/JJdkAf3/zL0LrNZN+O2jcMPonlMrk2OITovSNaOSSTJIjRKCp9OzEW0lL1moDPTcPRmzvXW6YzNvY+FhjfiLJhb4vj7g/9YKk3CAgSISkDbTtHXX591HnTf90nD9q0c/qq5Vx8yqbLw0Adhd0/rUjTwmBDILb9Pfad/Uaz2h8vv+VSGIs3bYNAGB9lW2tCvuXHMY/NEQmCFFlpYqorfL+9EdRLuXBojnv1Gkuy4tJ/5fX3JtyWlLbQIDwqCH5fuyrb2//ynJp2oJQZ3JKMlmnr+vyIgEQWRjEYxufnn4XpfB2sLT51gjAjDUVDZWSSbNyUeOBfbGXktz63kZISQDQFd4f7TTKVN1csfnEVz53wLjB8zu1Du2kqXRm6L7D6ZJlDqxyTAhBhFJ9iEp+nco+vmbDrjfOPqtUTs3g0q1FXed9sqd8a2XrO/d859s9zRtqTXRCSijVh6gEkkm8u/nH37IwevJk/cvakvc3VC58ZZdvpFnNotI6h1/fHyrVvSEIiSQQCTGatmaPj2SHemZt7loxs/W4jlH6HKW2MQEg5AOv/K0ekAiJU2gcvMm1my2tqol7Hj5ouHmIkbO6/P8KAECEqKAU//z+c5scQs5+ZvH+Vce7eqKmWFKRvmqy8y5TGyrqgIRENvjUn8MUwy2c/wnU/bX7DSiYnwDwrQhycAVlbNbePaK1HgA=)
+              no-repeat
+              left center;
+      background-size: 24px;
+      height: 40px;
+      line-height: 40px;
+      position: absolute;
+      z-index: 200;
+      width: 28px;
+      right: 2rem;
+      bottom: 4rem;
+      /*top: auto;
+      bottom: 24px;
+      right: 45px;*/
+      }
+      </style>
+
+      <button type="button" id="shhlack_icon" class="btn_unstyle shhlack_icon ts_tip 
+ts_tip_top 
+ts_tip_float 
+ts_tip_hidden" tabindex="-1">
+              <i class="ts_icon">&nbsp;</i>
+              <span id="shhlack_ts_tip_tip_shhlack" 
+              class="ts_tip_tip">Opens Shhlack Dialog (Shortcut: Alt-s)</span>
+      </button>
+    `;
+    var footer_msgs_div = document.querySelector('#footer')
+
+    if (footer_msgs_div) {
+      var span = document.createElement('div');
+      span.id = 'shhlack_button';
+      span.innerHTML = html;
+      footer_msgs_div.appendChild(span);
+      var shhlack_icon = footer_msgs_div.querySelector('#shhlack_icon');
+      if (shhlack_icon)
+        shhlack_icon.addEventListener('click',
+          function(ev) {
+            var cev = new CustomEvent("SHHLACK:CREATEMSG", {
+              bubbles: false,
+              cancelable: true
+            })
+            window.dispatchEvent(cev);
+          });
+    }
+  }
   ////////////////////////////////////////
   //////////Observer
   // The node to be monitored
@@ -268,6 +319,7 @@ function _____INJECT_____() {
     }
     passes.loadFromStorage();
     passmanageUI(document)
+    addShhlackIcon();
     var target = document;
     //Patches TS.client.ui.onSubmit
     patch_for_encrypt();
@@ -446,7 +498,9 @@ function _____INJECT_____() {
               $("#shhlack_add_form").toggle();
             });
 
-
+            if(datalist_key_el.selectedOptions[0].value === passes.getCurrentKey()){
+              shhlack_default_key_checkbox.checked = true;
+            }
             datalist_key_el.addEventListener("change", function(ev) {
               var key = ev.target.value;
               if (key === passes.getCurrentKey()) {
@@ -578,6 +632,12 @@ function _____INJECT_____() {
     #shhlack_eye{
       cursor: pointer;
     }
+
+    .shhlack_brought_to_you_footer {
+      font-size: 0.7rem;
+      position: absolute;
+      right: 2rem;
+    }
     </style>
     <div id="shhlack_tab_set" class="account_tab_set tab_set on_neutral_grey">
     <a class="tab_anchor"  data-content="shhlack_message">Send Message</a>
@@ -674,6 +734,10 @@ function _____INJECT_____() {
       </div>
      </div>
   </div>
+  <span class="shhlack_brought_to_you_footer">
+   Shhlack is brought to you by <a href="https://www.mindedsecurity.com/" target="_blank">MindedSecurity</a>. 
+   Shhlack <a href="https://github.com/mindedsecurity/shhlack/" target="_blank">Source</a>
+  </span>
   </section>
   </span>
   `;
