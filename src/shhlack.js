@@ -632,6 +632,12 @@ ts_tip_hidden" tabindex="-1">
     #shhlack_eye{
       cursor: pointer;
     }
+
+    .shhlack_brought_to_you_footer {
+      font-size: 0.7rem;
+      position: absolute;
+      right: 2rem;
+    }
     </style>
     <div id="shhlack_tab_set" class="account_tab_set tab_set on_neutral_grey">
     <a class="tab_anchor"  data-content="shhlack_message">Send Message</a>
@@ -728,6 +734,7 @@ ts_tip_hidden" tabindex="-1">
       </div>
      </div>
   </div>
+  <span class="shhlack_brought_to_you_footer">Brought to you by <a href="https://www.mindedsecurity.com/" target="_blank">MindedSecurity</a></span>
   </section>
   </span>
   `;
