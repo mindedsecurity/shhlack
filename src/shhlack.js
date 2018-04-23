@@ -734,7 +734,10 @@ ts_tip_hidden" tabindex="-1">
       </div>
      </div>
   </div>
-  <span class="shhlack_brought_to_you_footer">Brought to you by <a href="https://www.mindedsecurity.com/" target="_blank">MindedSecurity</a></span>
+  <span class="shhlack_brought_to_you_footer">
+   Shhlack is brought to you by <a href="https://www.mindedsecurity.com/" target="_blank">MindedSecurity</a>. 
+   Shhlack <a href="https://github.com/mindedsecurity/shhlack/" target="_blank">Source</a>
+  </span>
   </section>
   </span>
   `;
