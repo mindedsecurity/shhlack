@@ -24,6 +24,7 @@ function _____INJECT_____() {
   /// TODO: Use background scripts to get password and prefixcommand 
   var className = 'c-message__body';
   var searchClassName = 'message_body';
+  var selector_search_array = ['.c-message_attachment__text > span', '.message_body', '.c-message__body'];
   var prefixCommand = "@@@@";
   var hmacPrefix = '####';
   var launchDialog;
@@ -112,8 +113,12 @@ function _____INJECT_____() {
   var shouldBeTreated = function(msg) {
     return msg.indexOf(prefixCommand) !== -1;
   }
+
   var is_message = function(el) {
-    return (el.className.indexOf(className)!== -1 || el.className.indexOf(searchClassName)!== -1) && shouldBeTreated(el.textContent);
+    return (el.className.indexOf(className) !== -1 ||
+      el.className.indexOf(searchClassName) !== -1 ||
+      (el.parentNode.querySelector(selector_search_array) === el))
+      && shouldBeTreated(el.textContent);
   }
 
   var decrypt = function(msg, pass) {
@@ -233,7 +238,7 @@ function _____INJECT_____() {
   var find_and_decrypt = function(el) {
     if (is_message(el))
       setContent(el, el.textContent)
-    var foundmsgs = el.querySelectorAll("." + className + ', .'+searchClassName);
+    var foundmsgs = el.querySelectorAll(selector_search_array.join(', '));
     [].forEach.call(foundmsgs, function(el) {
       //debug("Found", el.textContent);
       // TODO to format post decrypted msgs use
