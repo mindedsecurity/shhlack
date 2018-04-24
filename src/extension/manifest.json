@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name":"Shhlack",
   "short_name": "Shhlack",
-  "description": "Shhlack is an encryptor/decryptor to improve privacy in peer to peer messages in Slack created by Minded Security.",
+  "description": "Shhlack is an encryptor/decryptor to improve privacy in peer to peer messages in Slack. Created by Minded Security.",
   "version":"1.0.6",
   "icons": { 
     "16":"images/logo_32.png",
