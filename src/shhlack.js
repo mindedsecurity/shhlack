@@ -385,11 +385,16 @@ ts_tip_hidden" tabindex="-1">
   //// Key Management
   // NB: TS.menu.$menu_items < the element to file menu
   function passmanageUI(targetEl) {
+    function updateDropDowns(){
+      qs('#shhlack_choosen_pass').innerHTML = getPairs();
+      qs("#shhlack_key").innerHTML = getPairs();
+    }
     function encode_entities(str) {
       return str && str.replace(/</g, "&lt;").replace(/"/g, "&quot;") || '';
     }
     function getPairs() {
       var key_passes = '';
+      var currentKey = passes.getCurrentKey();
       passes.getKeys().forEach(function(key) {
         key_passes += `<option ${currentKey === key ? "selected" : ""} value="${encode_entities(key)}" >${encode_entities(key)}`
       });
@@ -472,11 +477,13 @@ ts_tip_hidden" tabindex="-1">
             // Set current Key
             shhlack_default_key_checkbox.addEventListener('change', function(ev) {
               passes.setCurrentKey(datalist_key_el.value);
+              updateDropDowns();
             });
 
             qs('#shhlack_choosen_pass').addEventListener('change', function(ev) {
               var val = ev.target.value;
               passes.setCurrentKey(val);
+              updateDropDowns();
             });
 
             qs("#shhlack_delete").addEventListener("click", function(ev) {
@@ -541,10 +548,13 @@ ts_tip_hidden" tabindex="-1">
             // getSelected Tab
             var elem = qs(".tab_anchor.selected");
             if (elem && elem.dataset['content'] === 'shhlack_message') {
-              sendEncryptedMessage({
-                title: qs('#shhlack_message_title').value,
-                content: qs('#shhlack_message_content').value
-              });
+              var content = qs('#shhlack_message_content').value;
+              if(content != ''){
+                sendEncryptedMessage({
+                  title: qs('#shhlack_message_title').value,
+                  content: content
+                });
+              }
             }/*else if(elem && elem.dataset['content'] === 'shhlack_pairs'){
 
             }else if(elem && elem.dataset['content'] === 'shhlack_master'){
@@ -798,21 +808,26 @@ ts_tip_hidden" tabindex="-1">
     var qsall = targetEl.querySelectorAll.bind(targetEl);
     if(passes.getCurrentKey() == undefined || passes.getKeys().length===0){
       alert("No passphrases in database, define at least one");
-      setTimeout(function (){launchDialog(1)},2000);
+      setTimeout(function() {
+        launchDialog(1)
+      }, 2000);    
     }
     var container_el = qs("#shhlack_container");
     var currentKey = passes.getCurrentKey();
     if (!container_el) {
       document.addEventListener('keyup', function(ev) {
-        if (ev.altKey && ev.key === CHAR){
+        if (ev.altKey && ev.key === CHAR && !TS.generic_dialog.is_showing) {
           launchDialog(0);
+        } else if (ev.key === 'Escape' && TS.generic_dialog.is_showing) {
+          TS.generic_dialog.cancel();
         }
       });
       return;
     }
     else{
-      qs('#shhlack_choosen_pass').innerHTML = getPairs();
-      qs("#shhlack_key").innerHTML = getPairs();
+      updateDropDowns();
+      // qs('#shhlack_choosen_pass').innerHTML = getPairs();
+      // qs("#shhlack_key").innerHTML = getPairs();
     }
   }
 
