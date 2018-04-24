@@ -1,5 +1,5 @@
 
-var sendMsg = function(title,msg) {
+var sendMsg = function(title, msg) {
   chrome.tabs.query({
     active: true,
     currentWindow: true
@@ -21,10 +21,10 @@ window.addEventListener("load", function() {
 
   textarea.addEventListener("keydown", function(event) {
     if (event.keyCode == 13 && event.ctrlKey == true) {
-      sendMsg(input.value,this.value);
+      sendMsg(input.value, this.value);
     }
   });
   document.querySelector("button").addEventListener("click", function(event) {
-    sendMsg(input.value,textarea.value);
+    sendMsg(input.value, textarea.value);
   });
 });

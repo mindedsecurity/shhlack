@@ -1,7 +1,7 @@
 const DEBUG = true;
 var debug = DEBUG ? console.log.bind(console) : function() {};
 // added for FF compatibility
-var messageListener = chrome.extension.onMessage || chrome.runtime.onMessage 
+var messageListener = chrome.extension.onMessage || chrome.runtime.onMessage;
 messageListener.addListener(
   function(msg) {
     switch (msg.action) {
@@ -14,7 +14,10 @@ messageListener.addListener(
         break;
       case 'message':
         var cev = new CustomEvent("SHHLACK:MSG", {
-          detail: JSON.stringify({content:msg.value,title:msg.title}),
+          detail: JSON.stringify({
+            content: msg.value,
+            title: msg.title
+          }),
           bubbles: false,
           cancelable: true
         })

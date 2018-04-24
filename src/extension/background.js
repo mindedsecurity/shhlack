@@ -1,9 +1,9 @@
-chrome.browserAction.onClicked.addListener(function(tab) { 
-  
-    chrome.tabs.sendMessage(tab.id, {
-      tabId: tab.id,
-      action: "createmessage" 
-    });
+chrome.browserAction.onClicked.addListener(function(tab) {
+
+  chrome.tabs.sendMessage(tab.id, {
+    tabId: tab.id,
+    action: "createmessage"
+  });
 });
 
 chrome.runtime.onInstalled.addListener(function(details) {
@@ -11,8 +11,10 @@ chrome.runtime.onInstalled.addListener(function(details) {
     chrome.tabs.query({
       url: ["https://*.slack.com/*", "http://*.slack.com/*"]
     }, function(results) {
-      results.forEach((tab)=>{
-        chrome.tabs.reload(tab.id,{bypassCache:true});
+      results.forEach((tab) => {
+        chrome.tabs.reload(tab.id, {
+          bypassCache: true
+        });
       });
     });
   }

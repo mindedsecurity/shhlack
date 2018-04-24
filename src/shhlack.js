@@ -62,7 +62,7 @@ function _____INJECT_____() {
     getCurrentKey: function(key) {
       if (this.currentKey != null) {
         return this.currentKey;
-      }else if(this.getKeys().length>0){
+      } else if (this.getKeys().length > 0) {
         this.setCurrentKey(this.getKeys()[0]);
         return this.currentKey;
       } else {
@@ -75,19 +75,19 @@ function _____INJECT_____() {
     getKeys: function getKeys() {
       return Object.keys(this.passphrases)
     },
-    serializePassObject: function (obj){
+    serializePassObject: function(obj) {
       obj = obj || this;
       return btoa(JSON.stringify({
         passphrases: obj.passphrases,
         currentKey: obj.currentKey
       }));
     },
-    deSerializePassObject: function (serialized, toObj){
+    deSerializePassObject: function(serialized, toObj) {
       toObj = toObj || this;
       if (serialized) {
-        try{
-         serialized = atob(serialized)
-        }catch(e){};
+        try {
+          serialized = atob(serialized)
+        } catch (e) {};
         var obj = JSON.parse(serialized);
         if (Object.keys(obj.passphrases).length > 0) {
           toObj.passphrases = obj.passphrases;
@@ -96,18 +96,18 @@ function _____INJECT_____() {
       }
     },
     loadFromStorage: function loadFromStorage(text) {
-      var saved_passes = text||localStorage.shhlack_passes;
+      var saved_passes = text || localStorage.shhlack_passes;
       this.deSerializePassObject(saved_passes);
     },
     saveOnStorage: function saveOnStorage() {
       localStorage.shhlack_passes = this.serializePassObject();
     }
   };
-  function is_slack_app(){
+  function is_slack_app() {
     return !!document.querySelector('#team_menu');
   }
-  function signToHex(message,pass) {
-      return cryptojs.HmacSHA256(message, pass)+'';
+  function signToHex(message, pass) {
+    return cryptojs.HmacSHA256(message, pass) + '';
   }
 
   var shouldBeTreated = function(msg) {
@@ -115,7 +115,7 @@ function _____INJECT_____() {
   }
 
   var is_message = function(el) {
-    if(!el)
+    if (!el)
       return false;
     return (el.className.indexOf(className) !== -1 ||
       el.className.indexOf(searchClassName) !== -1 ||
@@ -224,13 +224,13 @@ function _____INJECT_____() {
   }
   ///////////////////////////////////////////////////////////
   window.addEventListener("SHHLACK:MSG", function(ev) {
-    if(!is_slack_app())
+    if (!is_slack_app())
       return;
     var msg = JSON.parse(ev.detail);
     sendEncryptedMessage(msg);
   });
   window.addEventListener("SHHLACK:CREATEMSG", function(ev) {
-    if(!is_slack_app())
+    if (!is_slack_app())
       return;
     launchDialog();
   });
@@ -330,7 +330,7 @@ ts_tip_hidden" tabindex="-1">
   //////////Observer
   // The node to be monitored
   window.addEventListener("load", function() {
-    if(!is_slack_app()){
+    if (!is_slack_app()) {
       return;
     }
     passes.loadFromStorage();
@@ -385,7 +385,7 @@ ts_tip_hidden" tabindex="-1">
   //// Key Management
   // NB: TS.menu.$menu_items < the element to file menu
   function passmanageUI(targetEl) {
-    function updateDropDowns(){
+    function updateDropDowns() {
       qs('#shhlack_choosen_pass').innerHTML = getPairs();
       qs("#shhlack_key").innerHTML = getPairs();
     }
@@ -418,12 +418,12 @@ ts_tip_hidden" tabindex="-1">
             var shhlack_default_key_checkbox = qs('#shhlack_default_key_checkbox');
             var textarea = qs('#shhlack_message_content');
             textarea.textContent = getContentMessage();
-            textarea.addEventListener('keydown',function (ev) {
-               if (ev.ctrlKey && ev.key === 'Enter'){
-                 TS.generic_dialog.go();
-               }
+            textarea.addEventListener('keydown', function(ev) {
+              if (ev.ctrlKey && ev.key === 'Enter') {
+                TS.generic_dialog.go();
+              }
             });
-            datalist_pass_el.value = passes.getCurrentValue()||'';
+            datalist_pass_el.value = passes.getCurrentValue() || '';
 
             // Selector for tabs
             qs("#shhlack_tab_set").addEventListener("click", function(e) {
@@ -436,32 +436,32 @@ ts_tip_hidden" tabindex="-1">
             });
             // Select tab (default to first)
             qs("#shhlack_tab_set").children[tabIndex].click()
-//////////////////////////////////
-            qs("#shhlack_file_upload").addEventListener('change',function(ev){
+            //////////////////////////////////
+            qs("#shhlack_file_upload").addEventListener('change', function(ev) {
               var reader = new FileReader()
               reader.onload = function(event) {
                 var content = event.target.result
-                try{
+                try {
                   var passphrases = passes.loadFromStorage(content);
-                }catch(e){
+                } catch (e) {
                   alert("Error in decoding passphrases, not a JSON file");
                 }
                 //passes.passphrases = Object.assign(passphrases,passes.passphrases);
                 passes.saveOnStorage();
                 passmanageUI(targetEl);
-                //setOK with fade
+              //setOK with fade
               }
               reader.readAsText(ev.target.files[0]);
             });
 
-            qs("#shhlack_upload").addEventListener('click', function(){
+            qs("#shhlack_upload").addEventListener('click', function() {
               $("#shhlack_file_upload").click();
             });
 
-            qs("#shhlack_download").addEventListener('click', function(){
+            qs("#shhlack_download").addEventListener('click', function() {
               var content = passes.serializePassObject();
               var blob = new Blob([content], {
-               type: "octet/stream"
+                type: "octet/stream"
               });
 
               url = window.URL.createObjectURL(blob);
@@ -473,7 +473,7 @@ ts_tip_hidden" tabindex="-1">
               passmanageUI(targetEl);
               window.URL.revokeObjectURL(url);
             });
-//////////////////////////////////
+            //////////////////////////////////
             // Set current Key
             shhlack_default_key_checkbox.addEventListener('change', function(ev) {
               passes.setCurrentKey(datalist_key_el.value);
@@ -505,7 +505,7 @@ ts_tip_hidden" tabindex="-1">
               var keyEl = qs("#shhlack_new_key");
               var valueEl = qs("#shhlack_new_value");
               passes.set(keyEl.value, valueEl.value);
-              if(passes.getCurrentKey() == null){
+              if (passes.getCurrentKey() == null) {
                 passes.setCurrentKey(keyEl.value);
               }
               keyEl.value = '';
@@ -522,7 +522,7 @@ ts_tip_hidden" tabindex="-1">
               $("#shhlack_add_form").toggle();
             });
 
-            if(datalist_key_el.selectedOptions[0].value === passes.getCurrentKey()){
+            if (datalist_key_el.selectedOptions[0].value === passes.getCurrentKey()) {
               shhlack_default_key_checkbox.checked = true;
             }
             datalist_key_el.addEventListener("change", function(ev) {
@@ -549,17 +549,17 @@ ts_tip_hidden" tabindex="-1">
             var elem = qs(".tab_anchor.selected");
             if (elem && elem.dataset['content'] === 'shhlack_message') {
               var content = qs('#shhlack_message_content').value;
-              if(content != ''){
+              if (content != '') {
                 sendEncryptedMessage({
                   title: qs('#shhlack_message_title').value,
                   content: content
                 });
               }
-            }/*else if(elem && elem.dataset['content'] === 'shhlack_pairs'){
+            } /*else if(elem && elem.dataset['content'] === 'shhlack_pairs'){
 
-            }else if(elem && elem.dataset['content'] === 'shhlack_master'){
+              }else if(elem && elem.dataset['content'] === 'shhlack_master'){
 
-            }*/
+              }*/
           }
         });
       } catch (exc) {}
@@ -806,11 +806,11 @@ ts_tip_hidden" tabindex="-1">
     }
     var qs = targetEl.querySelector.bind(targetEl);
     var qsall = targetEl.querySelectorAll.bind(targetEl);
-    if(passes.getCurrentKey() == undefined || passes.getKeys().length===0){
+    if (passes.getCurrentKey() == undefined || passes.getKeys().length === 0) {
       alert("No passphrases in database, define at least one");
       setTimeout(function() {
         launchDialog(1)
-      }, 2000);    
+      }, 2000);
     }
     var container_el = qs("#shhlack_container");
     var currentKey = passes.getCurrentKey();
@@ -823,12 +823,8 @@ ts_tip_hidden" tabindex="-1">
         }
       });
       return;
-    }
-    else{
+    } else {
       updateDropDowns();
-      // qs('#shhlack_choosen_pass').innerHTML = getPairs();
-      // qs("#shhlack_key").innerHTML = getPairs();
     }
   }
-
 }
