@@ -5,3 +5,15 @@ chrome.browserAction.onClicked.addListener(function(tab) {
       action: "createmessage" 
     });
 });
+
+chrome.runtime.onInstalled.addListener(function(details) {
+  if (details.reason == "install" || details.reason == "update") {
+    chrome.tabs.query({
+      url: ["https://*.slack.com/*", "http://*.slack.com/*"]
+    }, function(results) {
+      results.forEach((tab)=>{
+        chrome.tabs.reload(tab.id,{bypassCache:true});
+      });
+    });
+  }
+});
