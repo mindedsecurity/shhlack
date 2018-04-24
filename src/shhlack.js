@@ -455,6 +455,7 @@ ts_tip_hidden" tabindex="-1">
               this.download = "shhlack_passphrases.json";
               //anchor.click();
               passmanageUI(targetEl);
+              window.URL.revokeObjectURL(url);
             });
 //////////////////////////////////
             // Set current Key
