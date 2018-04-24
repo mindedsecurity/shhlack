@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@mindedlab:stefano/shhlack.git"
+    "url": "git@github.com:mindedsecurity/shhlack.git"
   },
   "author": "Minded Security",
   "license": "ISC",
