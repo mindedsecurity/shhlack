@@ -656,55 +656,55 @@ ts_tip_hidden" tabindex="-1">
     </div>
 
     <section id="shhlack_tab_show_content" class="tab_pane selected clearfix" >
-    	<div id="shhlack_tabs_content" >
-    		 <div class="shhlack_tabs_content shhlack_hidden" id="shhlack_message">
-    				<div class="top_margin">
-    					<label class="select small float_right no_right_padding">
-    						<select id="shhlack_choosen_pass" class="small no_top_margin">
-    							${getPairs()}
-    						</select>
-    					</label>
-    					<input type="text" class="small" id="shhlack_message_title" value="" placeholder="Title (optional)">
-    				</div>
+     <div id="shhlack_tabs_content" >
+       <div class="shhlack_tabs_content shhlack_hidden" id="shhlack_message">
+        <div class="top_margin">
+         <label class="select small float_right no_right_padding">
+          <select id="shhlack_choosen_pass" class="small no_top_margin">
+           ${getPairs()}
+          </select>
+         </label>
+         <input type="text" class="small" id="shhlack_message_title" value="" placeholder="Title (optional)">
+        </div>
 
-    				<div class="top_margin bottom_margin">
-    					<textarea name="content" id="shhlack_message_content" class=" full_width" ></textarea>
-    				</div>
-    		 </div>
-    		 <div class="shhlack_tabs_content shhlack_hidden" id="shhlack_pairs" >
-    				<div class="top_margin ">
-    					<div class="row-fluid padding_25">
-    						<div class="span12">
-    							<!-- UPLOAD -->
-    							<span id="shhlack_upload" class="current_status_clear_icon_cover ts_tip ts_tip_top ts_tip_float ts_tip_hidden" aria-labelledby="shhlack_ts_tip_tip_3" style="cursor: pointer" >
-    								<input id="shhlack_file_upload" type="file" class="shhlack_hidden">
-    								<i class="c-deprecated-icon c-icon--upload" type="cloud-download" aria-hidden="true"></i></a>
-    								<span id="shhlack_ts_tip_tip_3" class="ts_tip_tip">Restore all Passphrase from backup file</span>
-    							</span>
-    							<!-- DOWNLOAD -->
-    							<span id="" class="current_status_clear_icon_cover ts_tip ts_tip_top ts_tip_float ts_tip_hidden" aria-labelledby="shhlack_ts_tip_tip_4" style="cursor: pointer" >
-    								<a href="#" id="shhlack_download">
-    									<i class="c-deprecated-icon c-icon--download" type="cloud-download" aria-hidden="true"></i></a>
-    									<span id="shhlack_ts_tip_tip_4" class="ts_tip_tip">Download all Passphrase as backup</span>
-    								</a>
-    							</span>
-      					</div>
-      					<div class="row-fluid padding_25">
-    							<!-- SET AS DEFAULT -->
-    							<label for="shhlack_default_key_checkbox" style="width: auto; min-width: auto;">Default
-    								<input type="checkbox" style="margin: 0 0 4px 4px;" id="shhlack_default_key_checkbox">
-    							</label>
-    						</div>
-    					</div>
-    					<div class="row-fluid padding_25">
-    						<div class="span11">
-    							<!-- SELECT KEY -->
-    							<label class="select small no_right_padding" style="width:100%">
-    								<select id="shhlack_key" class="small no_top_margin">
-    									${getPairs()}
-    								</select>
-    							</label>
-    						</div>
+        <div class="top_margin bottom_margin">
+         <textarea name="content" id="shhlack_message_content" class=" full_width" ></textarea>
+        </div>
+       </div>
+       <div class="shhlack_tabs_content shhlack_hidden" id="shhlack_pairs" >
+        <div class="top_margin ">
+         <div class="row-fluid padding_25">
+          <div class="span12">
+           <!-- UPLOAD -->
+           <span id="shhlack_upload" class="current_status_clear_icon_cover ts_tip ts_tip_top ts_tip_float ts_tip_hidden" aria-labelledby="shhlack_ts_tip_tip_3" style="cursor: pointer" >
+            <input id="shhlack_file_upload" type="file" class="shhlack_hidden">
+            <i class="c-deprecated-icon c-icon--upload" type="cloud-download" aria-hidden="true"></i></a>
+            <span id="shhlack_ts_tip_tip_3" class="ts_tip_tip">Restore all Passphrase from backup file</span>
+           </span>
+           <!-- DOWNLOAD -->
+           <span id="" class="current_status_clear_icon_cover ts_tip ts_tip_top ts_tip_float ts_tip_hidden" aria-labelledby="shhlack_ts_tip_tip_4" style="cursor: pointer" >
+            <a href="#" id="shhlack_download">
+             <i class="c-deprecated-icon c-icon--download" type="cloud-download" aria-hidden="true"></i></a>
+             <span id="shhlack_ts_tip_tip_4" class="ts_tip_tip">Download all Passphrase as backup</span>
+            </a>
+           </span>
+           </div>
+           <div class="row-fluid padding_25">
+           <!-- SET AS DEFAULT -->
+           <label for="shhlack_default_key_checkbox" style="width: auto; min-width: auto;">Default
+            <input type="checkbox" style="margin: 0 0 4px 4px;" id="shhlack_default_key_checkbox">
+           </label>
+          </div>
+         </div>
+         <div class="row-fluid padding_25">
+          <div class="span11">
+           <!-- SELECT KEY -->
+           <label class="select small no_right_padding" style="width:100%">
+            <select id="shhlack_key" class="small no_top_margin">
+             ${getPairs()}
+            </select>
+           </label>
+          </div>
                 <div class="span1 padding_left_100">
                   <!-- DELETE -->
                   <span id="shhlack_delete" class="current_status_clear_icon_cover ts_tip ts_tip_top ts_tip_float ts_tip_hidden padding_top_50" aria-labelledby="shhlack_ts_tip_tip_2 padding_top_50" style="cursor: pointer" >
@@ -713,20 +713,20 @@ ts_tip_hidden" tabindex="-1">
                   </span>
                 </div>
               </div>
-      				<div class="row-fluid padding_25">
-    						<div class="span11">
-    							<!-- INPUT PASSPHRASE -->
-    							<input type="password" disabled class="small full_width no_margin" id="shhlack_value" value="" placeholder="Passphrase here">
-    						</div>
-    						<div class="span1 padding_left_100">
-    							<!-- SHOW PASSPHRASE -->
-    							<span id="shhlack_eye" class="ts_tip ts_tip_bottom ts_tip_float inline_block ts_tip_hidden padding_top_50"
-    										onclick="var pass=document.querySelector('#shhlack_value');pass.type=pass.type==='password'?'text':'password'">
-    								<ts-icon class="ts_icon_eye prefix"></ts-icon>
-    								<span id="shhlack_ts_tip_tip_1" class="ts_tip_tip">Show Passphrase</span>
-    							</span>
+          <div class="row-fluid padding_25">
+          <div class="span11">
+           <!-- INPUT PASSPHRASE -->
+           <input type="password" disabled class="small full_width no_margin" id="shhlack_value" value="" placeholder="Passphrase here">
+          </div>
+          <div class="span1 padding_left_100">
+           <!-- SHOW PASSPHRASE -->
+           <span id="shhlack_eye" class="ts_tip ts_tip_bottom ts_tip_float inline_block ts_tip_hidden padding_top_50"
+              onclick="var pass=document.querySelector('#shhlack_value');pass.type=pass.type==='password'?'text':'password'">
+            <ts-icon class="ts_icon_eye prefix"></ts-icon>
+            <span id="shhlack_ts_tip_tip_1" class="ts_tip_tip">Show Passphrase</span>
+           </span>
                 </div>
-    					</div>
+         </div>
               <div class="row-fluid padding_25">
                 <span>
                   Add new passphrase
@@ -738,18 +738,18 @@ ts_tip_hidden" tabindex="-1">
                 </span>
               </div>
               <div class="row-fluid padding_25">
-    						<div class="span11">
+          <div class="span11">
                   <!-- ADD -->
                   <div id="shhlack_add_form" style="display: none; border: 1px solid #e8e8e8;" class="padding_75">
 
                     <div class="row-fluid padding_25">
-          						<div class="span12">
+                <div class="span12">
                         <!-- INPUT KEY -->
                         <input type="text" class="small full_width padding_bottom_50" id="shhlack_new_key" value="" placeholder="Passphrase name">
                       </div>
                     </div>
                     <div class="row-fluid padding_25">
-          						<div class="span12">
+                <div class="span12">
                         <!-- INPUT PASSPHRASE -->
                         <input type="password" class="small full_width " id="shhlack_new_value" value="" placeholder="Pre shared passphrase">
                       </div>
@@ -761,23 +761,23 @@ ts_tip_hidden" tabindex="-1">
                   </div>
                 </div>
               </div>
-    				</div>
-    		 </div>
-    		 <div class="shhlack_tabs_content shhlack_hidden" id="shhlack_master" >
-    			<div class="top_margin">
-    				<label style="width: 20%" for="shhlack_master_checkbox">
-    						Enable Master
-    						<input type="checkbox" style="width: 10%" id="shhlack_master_checkbox" style="width: 66%"
-    									onchange="alert('not implemented yet');return ;var t=document.querySelector('#shhlack_personal_master_key');t.disabled=!this.checked">
-    				</label>
-    				<input style="width: 50%" id="shhlack_personal_master_key" class="small no_top_margin" disabled type="password" >
-    			</div>
-    		 </div>
-    	</div>
-    	<span class="shhlack_brought_to_you_footer">
-    	 Shhlack is brought to you by <a href="https://www.mindedsecurity.com/" target="_blank">MindedSecurity</a>.
-    	 Shhlack <a href="https://github.com/mindedsecurity/shhlack/" target="_blank">Source</a>
-    	</span>
+        </div>
+       </div>
+       <div class="shhlack_tabs_content shhlack_hidden" id="shhlack_master" >
+       <div class="top_margin">
+        <label style="width: 20%" for="shhlack_master_checkbox">
+          Enable Master
+          <input type="checkbox" style="width: 10%" id="shhlack_master_checkbox" style="width: 66%"
+             onchange="alert('not implemented yet');return ;var t=document.querySelector('#shhlack_personal_master_key');t.disabled=!this.checked">
+        </label>
+        <input style="width: 50%" id="shhlack_personal_master_key" class="small no_top_margin" disabled type="password" >
+       </div>
+       </div>
+     </div>
+     <span class="shhlack_brought_to_you_footer">
+      Shhlack is brought to you by <a href="https://www.mindedsecurity.com/" target="_blank">MindedSecurity</a>.
+      Shhlack <a href="https://github.com/mindedsecurity/shhlack/" target="_blank">Source</a>
+     </span>
     </section>
 
   </span>
