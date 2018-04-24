@@ -115,9 +115,11 @@ function _____INJECT_____() {
   }
 
   var is_message = function(el) {
+    if(!el)
+      return false;
     return (el.className.indexOf(className) !== -1 ||
       el.className.indexOf(searchClassName) !== -1 ||
-      (el.parentNode.querySelector(selector_search_array) === el))
+      (el.parentNode && el.parentNode.querySelector(selector_search_array) === el))
       && shouldBeTreated(el.textContent);
   }
 
@@ -202,7 +204,9 @@ function _____INJECT_____() {
       debug("Decrypting msg", dec_msg);
       return dec_msg;
     } catch (e) {
-      console.error(e);
+      if (e.message !== "HMAC") {
+        console.error(e);
+      }
       return msg;
     }
   }
