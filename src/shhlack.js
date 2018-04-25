@@ -98,6 +98,22 @@ function _____INJECT_____() {
     loadFromStorage: function loadFromStorage(text) {
       var saved_passes = text || localStorage.shhlack_passes;
       this.deSerializePassObject(saved_passes);
+      //failsafe incongruency control 
+      var currentKey = this.getCurrentKey();
+      var keys = this.getKeys();
+      if (currentKey != null) {
+        if (keys.length === 0) {
+          this.setCurrentKey(null)
+        } else {
+          if (typeof this.get(this.getCurrentKey()) === 'undefined') {
+            this.setCurrentKey(keys[0]);
+          }
+        }
+      } else {
+        if (keys.length > 0) {
+          this.setCurrentKey(keys[0]);
+        }
+      }
     },
     saveOnStorage: function saveOnStorage() {
       localStorage.shhlack_passes = this.serializePassObject();
@@ -240,6 +256,7 @@ function _____INJECT_____() {
   }
 
   var find_and_decrypt = function(el) {
+    el = el || document.body;
     if (is_message(el))
       setContent(el, el.textContent)
     var foundmsgs = el.querySelectorAll(selector_search_array.join(', '));
@@ -385,9 +402,23 @@ ts_tip_hidden" tabindex="-1">
   //// Key Management
   // NB: TS.menu.$menu_items < the element to file menu
   function passmanageUI(targetEl) {
+    function getDefaultKeyCheckbox(){
+      return qs('#shhlack_default_key_checkbox');
+    }
+    function getManageKeysDropDown(){
+      return  qs("#shhlack_key");
+    }
+    function getSendMessageKeysDropDown(){
+      return  qs("#shhlack_choosen_pass");
+    }
     function updateDropDowns() {
-      qs('#shhlack_choosen_pass').innerHTML = getPairs();
-      qs("#shhlack_key").innerHTML = getPairs();
+      var datalist_key_el = getManageKeysDropDown();
+      getSendMessageKeysDropDown().innerHTML = getPairs();
+      datalist_key_el.innerHTML = getPairs();
+      var selected = datalist_key_el.selectedOptions;
+      if (selected.length > 0 && selected[0].value === passes.getCurrentKey()) {
+        getDefaultKeyCheckbox().checked = true;
+      }
     }
     function encode_entities(str) {
       return str && str.replace(/</g, "&lt;").replace(/"/g, "&quot;") || '';
@@ -415,7 +446,7 @@ ts_tip_hidden" tabindex="-1">
             var datalist_key_el = qs("#shhlack_key");
             var datalist_pass_el = qs('#shhlack_value');
 
-            var shhlack_default_key_checkbox = qs('#shhlack_default_key_checkbox');
+            var shhlack_default_key_checkbox = getDefaultKeyCheckbox();
             var textarea = qs('#shhlack_message_content');
             textarea.textContent = getContentMessage();
             textarea.addEventListener('keydown', function(ev) {
@@ -423,8 +454,13 @@ ts_tip_hidden" tabindex="-1">
                 TS.generic_dialog.go();
               }
             });
+            //Updates Passphrase
             datalist_pass_el.value = passes.getCurrentValue() || '';
 
+            // if (datalist_key_el.selectedOptions[0].value === passes.getCurrentKey()) {
+            //   shhlack_default_key_checkbox.checked = true;
+            // }
+            
             // Selector for tabs
             qs("#shhlack_tab_set").addEventListener("click", function(e) {
               var el = e.target;
@@ -480,7 +516,7 @@ ts_tip_hidden" tabindex="-1">
               updateDropDowns();
             });
 
-            qs('#shhlack_choosen_pass').addEventListener('change', function(ev) {
+            getSendMessageKeysDropDown().addEventListener('change', function(ev) {
               var val = ev.target.value;
               passes.setCurrentKey(val);
               updateDropDowns();
@@ -489,10 +525,18 @@ ts_tip_hidden" tabindex="-1">
             qs("#shhlack_delete").addEventListener("click", function(ev) {
               var key = datalist_key_el.value;
               var response = confirm("Are you sure you want to delete: " + key)
+
               if (response) {
+
                 passes.remove(key);
-                // datalist_key_el.value = '';
-                // targetEl.querySelector('#shhlack_value').value = '';
+                var keys = passes.getKeys();
+
+                if (keys.length > 1 && key === passes.getCurrentKey()) {
+                  // if deleted key was the current one it'll reset to the first
+                  passes.setCurrentKey(keys[0]);
+                } else { //No more passes
+                  passes.setCurrentKey(null);
+                }
                 passmanageUI(targetEl);
               }
             });
@@ -504,13 +548,23 @@ ts_tip_hidden" tabindex="-1">
             qs("#shhlack_add_ok").addEventListener("click", function(ev) {
               var keyEl = qs("#shhlack_new_key");
               var valueEl = qs("#shhlack_new_value");
-              passes.set(keyEl.value, valueEl.value);
+              var overwrite = true;
+
+              if (typeof passes.get(keyEl.value) !== 'undefined') {
+                overwrite = confirm("A passphrase named `" + keyEl.value + "` already exists. Do you want to modify it?");
+              }
+              if (overwrite) {
+                passes.set(keyEl.value, valueEl.value);
+              } else {
+                return;
+              }
               if (passes.getCurrentKey() == null) {
                 passes.setCurrentKey(keyEl.value);
               }
               keyEl.value = '';
               valueEl.value = '';
               $("#shhlack_add_form").toggle();
+              datalist_pass_el.value = passes.getCurrentValue() || '';
               passmanageUI(targetEl);
             });
 
@@ -522,9 +576,6 @@ ts_tip_hidden" tabindex="-1">
               $("#shhlack_add_form").toggle();
             });
 
-            if (datalist_key_el.selectedOptions[0].value === passes.getCurrentKey()) {
-              shhlack_default_key_checkbox.checked = true;
-            }
             datalist_key_el.addEventListener("change", function(ev) {
               var key = ev.target.value;
               if (key === passes.getCurrentKey()) {
@@ -534,12 +585,7 @@ ts_tip_hidden" tabindex="-1">
               }
               datalist_pass_el.value = passes.get(key);
             });
-          // datalist_key_el.addEventListener("input", function(ev) {
-          //   //passes.setCurrentKey(ev.target.value);
-          //   if (ev.target.value === passes.currentKey)
-          //     datalist_pass_el.value = passes.getCurrentValue();
-          // //passmanageUI(targetEl);
-          // });
+
           },
           show_cancel_button: true,
           esc_for_ok: true,
@@ -560,9 +606,12 @@ ts_tip_hidden" tabindex="-1">
               }else if(elem && elem.dataset['content'] === 'shhlack_master'){
 
               }*/
+            find_and_decrypt();
           }
         });
-      } catch (exc) {}
+      } catch (exc) {
+        console.error(exc)
+      }
     }
     function getContainer() {
       var container_html = `
@@ -639,7 +688,7 @@ ts_tip_hidden" tabindex="-1">
     }
     #shhlack_icon{
       background:
-            url(data:image/webp;base64,UklGRvwDAABXRUJQVlA4TO8DAAAvH8AHEE2Yads2plr7soj+x/5UEs3CMBtJfS7A+dMdxmY5TEWysQ8JJNA/ow81bSQ5U52OP74cqteD6H8AABRHR6Fr+w9POmVebjnIuW3b2N4FzQdfbNtWmfHVSeukttOmzUin+hvpbVW2O9u27eR53o/PfSPHtrZje/bzPr/N2GZpu8wg1CYTyHhS2rbtVLad/Hi/95Za27aqPfPchz8qsgwt/L+MjI9MXHpghh6iqQBSUamAFFlmpkdXCiwABFi9Odm27bi8tLRFb23VRlpWdFRbVF5a9JqNb94EIACKohaTKEEmAnGNEyxhF8qMQ4QDAEIQhEw0YbZMuAYAwDMeAQCQWxacAAB20AKIRyKWAQBfyoAxAEAz1Ite/AbAXhj6ADAJDaILoYAvYUgGfGC+IcAwACpCMAOAYyiITRQAOkIQBoCXIrgEQFoI/gMgoAgCABAY8v/xBwB/i+A3AP4FIAaNACjDFoIbwD+kAqAYDYUwhyEAQAlaoDAqcISNIuiHsqKtCIJgzCXGnn1k4LRWhnrUKNUqrzueeb/muvaT58UtI1WIMzMm3gGB7Vta/V58NyQzqr0yqq00qq00qrUwsqE0IgrpiFGrSZ2pa5Lry49K/m7LGkJUTdI06p5LITlKXZX3H7/JJdkAf3/zL0LrNZN+O2jcMPonlMrk2OITovSNaOSSTJIjRKCp9OzEW0lL1moDPTcPRmzvXW6YzNvY+FhjfiLJhb4vj7g/9YKk3CAgSISkDbTtHXX591HnTf90nD9q0c/qq5Vx8yqbLw0Adhd0/rUjTwmBDILb9Pfad/Uaz2h8vv+VSGIs3bYNAGB9lW2tCvuXHMY/NEQmCFFlpYqorfL+9EdRLuXBojnv1Gkuy4tJ/5fX3JtyWlLbQIDwqCH5fuyrb2//ynJp2oJQZ3JKMlmnr+vyIgEQWRjEYxufnn4XpfB2sLT51gjAjDUVDZWSSbNyUeOBfbGXktz63kZISQDQFd4f7TTKVN1csfnEVz53wLjB8zu1Du2kqXRm6L7D6ZJlDqxyTAhBhFJ9iEp+nco+vmbDrjfOPqtUTs3g0q1FXed9sqd8a2XrO/d859s9zRtqTXRCSijVh6gEkkm8u/nH37IwevJk/cvakvc3VC58ZZdvpFnNotI6h1/fHyrVvSEIiSQQCTGatmaPj2SHemZt7loxs/W4jlH6HKW2MQEg5AOv/K0ekAiJU2gcvMm1my2tqol7Hj5ouHmIkbO6/P8KAECEqKAU//z+c5scQs5+ZvH+Vce7eqKmWFKRvmqy8y5TGyrqgIRENvjUn8MUwy2c/wnU/bX7DSiYnwDwrQhycAVlbNbePaK1HgA=)
+            url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAIRgAACEYBqLsIiQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOWSURBVFiF7ZZdaJtlFMd/53neJGvTpaluxnZTUXAf2upQtOBV0IHsonPIvNAbvy0qqCB6qR2I4JVeyJjDVdGyYdVdKIKyC4dWBmXzq1hdZR/OWmfn2tm1TU3yPseLJDVL27xvanbngYckz/nn//8/J+85eURVqTVEJA2kgbuAjUAvMK6qPTWTqWroVRT9E9Aqa19NnDWIdwUIl6/PgUjdDBRPXinwXFn+VqCnElNPA+XET1bBNQDjZdie/2yg4mSBp6qsVj0M+GHJljD9SDWsCdEoJcxICGwpTpe9XxuGPEzsCwtU1V1hsbUYuCjxvwGvWlJE1pd93CQiDyxDY33V7BJtdAOFaRd29IZZj4aeA8DHdRYvrXWVWlIUvCBEZH4zsW0zN7e2B9Y5M3UEe+57Lo1YEiZPayyKERgYmuWrodkSbIdW/GVXfQYAWu7ZQsc1m0nFk7iKnIrg47jCE25MrOLa79qZMw3ENI86h4pAn5QbWBCBBkThxN9jpBqTqIAKWAxJ47iuyeOmZBzPKLgc09HVRLOTBaMiJZtV+UO14fDoCBilLWq4rcXjsVSUjrOneP3xJ3j4vgfZs/ttbCRCtG37heZDcAdWYIUnxJtXcNXKWba3tJI3lp+HjnJHOk3e+QB8+Ml+jgweZufuXWR/eRPjeziTCzh7IQIrcHXrJaxeGSOTP0/OWMQoL7/0yrx4Kd55rw/nHBppxnnTIaRDGlBbeO0fHyaCxfcd4i1eXOMpXtsziDaU7Vb/IUKP4qgzfHTmKNZYup/qXpBv33A9AN7aLqz7t/iLtfmyDPgoJ+emUKdETYS+3rfmc6nmy9jx9AsFQTOD37wJEVCnqPWXoqzNgAEOnjmOL47ffxzjs94D87nLkymyZAs4jeM1dZAZUab6Zpjpn6nKG9gFAFYL/e9bw6G/TrP1oS5iiRjvDuwFoPP2Trru30pmz5fYs47ZnaOcz42jStk8WKYBQ0FcAazw6eQx0vE1bLn7Tl6deI2RA4fobrmFcxtexMtANqJYbcQza8j5v6EBwyDUJPSLJNGcMjz5B9nRY/D1r9z7wSRmrA0Gh8kLOAPiAzaP1SvJMRZEH2zAOiFvFO/EBNNfHCf3/rf0Nx1km78Kp644dhd8i0ZvI3P5ASRgGgUa+OH5N8h9cwobiaJ5H4ywd3KCn2yCBR1W2hABfLJ+jEF/rrrAEveB/Vyc+0B72AtJJ/W/ET27mNY/HfuhjpQIYpMAAAAASUVORK5CYII=)
             no-repeat
             left center;
     }
@@ -806,6 +855,7 @@ ts_tip_hidden" tabindex="-1">
     }
     var qs = targetEl.querySelector.bind(targetEl);
     var qsall = targetEl.querySelectorAll.bind(targetEl);
+
     if (passes.getCurrentKey() == undefined || passes.getKeys().length === 0) {
       alert("No passphrases in database, define at least one");
       setTimeout(function() {
