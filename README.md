@@ -103,4 +103,5 @@ ClearTextTitle@@@@Base64(rawAESenc)#HMAC
 TODO:
 - Encrypt snippets 
 - Add Master Passphrase with Crypto Web APIs 
-
+- Option to Encrypt every message (Encrypted chat)
+- Add support for encrypted rich content.
