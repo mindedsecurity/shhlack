@@ -286,27 +286,59 @@ function _____INJECT_____() {
       console.log("no slack TS.ui to patch");
   }
 
+  function hasNoPassesInDB() {
+    return passes.getCurrentKey() == undefined || passes.getKeys().length === 0;
+  }
+
+  function maybeChangeShhlackIcon() {
+    var shhlack_icon = $('#shhlack_icon');
+
+    if (hasNoPassesInDB()) {
+      shhlack_icon.removeClass('shhlack_icon');
+      shhlack_icon.addClass('shhlack_icon_warn');
+      $("#shhlack_ts_tip_tip_shhlack")
+        .html(`Warning, No passphrases in database,<br>
+                you should define at least one.<br>
+                Opens Shhlack Dialog (Shortcut: Alt-s)`)
+    } else {
+      shhlack_icon.removeClass('shhlack_icon_warn');
+      shhlack_icon.addClass('shhlack_icon');
+      $("#shhlack_ts_tip_tip_shhlack")
+        .text(`Opens Shhlack Dialog (Shortcut: Alt-s)`)
+    }
+  }
 
   function addShhlackIcon() {
     var html = `<style>
-  #shhlack_icon{
-      background:
-              url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAIRgAACEYBqLsIiQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOWSURBVFiF7ZZdaJtlFMd/53neJGvTpaluxnZTUXAf2upQtOBV0IHsonPIvNAbvy0qqCB6qR2I4JVeyJjDVdGyYdVdKIKyC4dWBmXzq1hdZR/OWmfn2tm1TU3yPseLJDVL27xvanbngYckz/nn//8/J+85eURVqTVEJA2kgbuAjUAvMK6qPTWTqWroVRT9E9Aqa19NnDWIdwUIl6/PgUjdDBRPXinwXFn+VqCnElNPA+XET1bBNQDjZdie/2yg4mSBp6qsVj0M+GHJljD9SDWsCdEoJcxICGwpTpe9XxuGPEzsCwtU1V1hsbUYuCjxvwGvWlJE1pd93CQiDyxDY33V7BJtdAOFaRd29IZZj4aeA8DHdRYvrXWVWlIUvCBEZH4zsW0zN7e2B9Y5M3UEe+57Lo1YEiZPayyKERgYmuWrodkSbIdW/GVXfQYAWu7ZQsc1m0nFk7iKnIrg47jCE25MrOLa79qZMw3ENI86h4pAn5QbWBCBBkThxN9jpBqTqIAKWAxJ47iuyeOmZBzPKLgc09HVRLOTBaMiJZtV+UO14fDoCBilLWq4rcXjsVSUjrOneP3xJ3j4vgfZs/ttbCRCtG37heZDcAdWYIUnxJtXcNXKWba3tJI3lp+HjnJHOk3e+QB8+Ml+jgweZufuXWR/eRPjeziTCzh7IQIrcHXrJaxeGSOTP0/OWMQoL7/0yrx4Kd55rw/nHBppxnnTIaRDGlBbeO0fHyaCxfcd4i1eXOMpXtsziDaU7Vb/IUKP4qgzfHTmKNZYup/qXpBv33A9AN7aLqz7t/iLtfmyDPgoJ+emUKdETYS+3rfmc6nmy9jx9AsFQTOD37wJEVCnqPWXoqzNgAEOnjmOL47ffxzjs94D87nLkymyZAs4jeM1dZAZUab6Zpjpn6nKG9gFAFYL/e9bw6G/TrP1oS5iiRjvDuwFoPP2Trru30pmz5fYs47ZnaOcz42jStk8WKYBQ0FcAazw6eQx0vE1bLn7Tl6deI2RA4fobrmFcxtexMtANqJYbcQza8j5v6EBwyDUJPSLJNGcMjz5B9nRY/D1r9z7wSRmrA0Gh8kLOAPiAzaP1SvJMRZEH2zAOiFvFO/EBNNfHCf3/rf0Nx1km78Kp644dhd8i0ZvI3P5ASRgGgUa+OH5N8h9cwobiaJ5H4ywd3KCn2yCBR1W2hABfLJ+jEF/rrrAEveB/Vyc+0B72AtJJ/W/ET27mNY/HfuhjpQIYpMAAAAASUVORK5CYII=)
-              no-repeat
-              left center;
-      background-size: 24px;
-      height: 40px;
-      line-height: 40px;
-      z-index: 200;
-      width: 28px;
-      display: inline-block;
+       .shhlack_icon{
+        background:
+                url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAIRgAACEYBqLsIiQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOWSURBVFiF7ZZdaJtlFMd/53neJGvTpaluxnZTUXAf2upQtOBV0IHsonPIvNAbvy0qqCB6qR2I4JVeyJjDVdGyYdVdKIKyC4dWBmXzq1hdZR/OWmfn2tm1TU3yPseLJDVL27xvanbngYckz/nn//8/J+85eURVqTVEJA2kgbuAjUAvMK6qPTWTqWroVRT9E9Aqa19NnDWIdwUIl6/PgUjdDBRPXinwXFn+VqCnElNPA+XET1bBNQDjZdie/2yg4mSBp6qsVj0M+GHJljD9SDWsCdEoJcxICGwpTpe9XxuGPEzsCwtU1V1hsbUYuCjxvwGvWlJE1pd93CQiDyxDY33V7BJtdAOFaRd29IZZj4aeA8DHdRYvrXWVWlIUvCBEZH4zsW0zN7e2B9Y5M3UEe+57Lo1YEiZPayyKERgYmuWrodkSbIdW/GVXfQYAWu7ZQsc1m0nFk7iKnIrg47jCE25MrOLa79qZMw3ENI86h4pAn5QbWBCBBkThxN9jpBqTqIAKWAxJ47iuyeOmZBzPKLgc09HVRLOTBaMiJZtV+UO14fDoCBilLWq4rcXjsVSUjrOneP3xJ3j4vgfZs/ttbCRCtG37heZDcAdWYIUnxJtXcNXKWba3tJI3lp+HjnJHOk3e+QB8+Ml+jgweZufuXWR/eRPjeziTCzh7IQIrcHXrJaxeGSOTP0/OWMQoL7/0yrx4Kd55rw/nHBppxnnTIaRDGlBbeO0fHyaCxfcd4i1eXOMpXtsziDaU7Vb/IUKP4qgzfHTmKNZYup/qXpBv33A9AN7aLqz7t/iLtfmyDPgoJ+emUKdETYS+3rfmc6nmy9jx9AsFQTOD37wJEVCnqPWXoqzNgAEOnjmOL47ffxzjs94D87nLkymyZAs4jeM1dZAZUab6Zpjpn6nKG9gFAFYL/e9bw6G/TrP1oS5iiRjvDuwFoPP2Trru30pmz5fYs47ZnaOcz42jStk8WKYBQ0FcAazw6eQx0vE1bLn7Tl6deI2RA4fobrmFcxtexMtANqJYbcQza8j5v6EBwyDUJPSLJNGcMjz5B9nRY/D1r9z7wSRmrA0Gh8kLOAPiAzaP1SvJMRZEH2zAOiFvFO/EBNNfHCf3/rf0Nx1km78Kp644dhd8i0ZvI3P5ASRgGgUa+OH5N8h9cwobiaJ5H4ywd3KCn2yCBR1W2hABfLJ+jEF/rrrAEveB/Vyc+0B72AtJJ/W/ET27mNY/HfuhjpQIYpMAAAAASUVORK5CYII=)
+                no-repeat
+                left center;
+        background-size: 24px;
+        height: 40px;
+        line-height: 40px;
+        z-index: 200;
+        width: 28px;
+        display: inline-block;
+        }
+      .shhlack_icon_warn{
+        background: url(data:image/png;base64,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)
+                no-repeat
+                left center;
+        background-size: 24px;
+        height: 40px;
+        line-height: 40px;
+        z-index: 200;
+        width: 28px;
+        display: inline-block;
       }
       #shhlack_button {
         display: inline-block;
         float: left;
         padding-left: 4px;
       }
-     #footer_msgs {
+      #footer_msgs {
         width: calc(100% - 35px);
         float: right;
       }
@@ -318,7 +350,7 @@ function _____INJECT_____() {
       <button type="button" id="shhlack_icon" class="btn_unstyle shhlack_icon ts_tip
 ts_tip_top
 ts_tip_float
-ts_tip_hidden" tabindex="-1">
+ts_tip_hidden"  aria-labelledby="shhlack_ts_tip_tip_shhlack" tabindex="-1">
               <i class="ts_icon">&nbsp;</i>
               <span id="shhlack_ts_tip_tip_shhlack"
               class="ts_tip_tip">Opens Shhlack Dialog (Shortcut: Alt-s)</span>
@@ -327,8 +359,11 @@ ts_tip_hidden" tabindex="-1">
     var footer_msgs_div = document.querySelector('#footer')
 
     if (footer_msgs_div) {
-      var span = document.createElement('div');
-      span.id = 'shhlack_button';
+      var span = document.querySelector('#shhlack_button');
+      if (!span) {
+        span = document.createElement('div');
+        span.id = 'shhlack_button';
+      }
       span.innerHTML = html;
       footer_msgs_div.appendChild(span);
       var shhlack_icon = footer_msgs_div.querySelector('#shhlack_icon');
@@ -341,6 +376,7 @@ ts_tip_hidden" tabindex="-1">
             })
             window.dispatchEvent(cev);
           });
+      maybeChangeShhlackIcon();
     }
   }
   ////////////////////////////////////////
@@ -402,14 +438,15 @@ ts_tip_hidden" tabindex="-1">
   //// Key Management
   // NB: TS.menu.$menu_items < the element to file menu
   function passmanageUI(targetEl) {
-    function getDefaultKeyCheckbox(){
+
+    function getDefaultKeyCheckbox() {
       return qs('#shhlack_default_key_checkbox');
     }
-    function getManageKeysDropDown(){
-      return  qs("#shhlack_key");
+    function getManageKeysDropDown() {
+      return qs("#shhlack_key");
     }
-    function getSendMessageKeysDropDown(){
-      return  qs("#shhlack_choosen_pass");
+    function getSendMessageKeysDropDown() {
+      return qs("#shhlack_choosen_pass");
     }
     function updateDropDowns() {
       var datalist_key_el = getManageKeysDropDown();
@@ -438,6 +475,9 @@ ts_tip_hidden" tabindex="-1">
     launchDialog = function launchDialog(tabIndex) {
       try {
         tabIndex = tabIndex || 0;
+        if (tabIndex === 0 && hasNoPassesInDB()) {
+          tabIndex = 1;
+        }
         TS.generic_dialog.start({
           title: "Shhlack Panel",
           body: getContainer(),
@@ -460,7 +500,7 @@ ts_tip_hidden" tabindex="-1">
             // if (datalist_key_el.selectedOptions[0].value === passes.getCurrentKey()) {
             //   shhlack_default_key_checkbox.checked = true;
             // }
-            
+
             // Selector for tabs
             qs("#shhlack_tab_set").addEventListener("click", function(e) {
               var el = e.target;
@@ -540,7 +580,9 @@ ts_tip_hidden" tabindex="-1">
                 passmanageUI(targetEl);
               }
             });
-
+            qs("#shhlack_add_label").addEventListener("click", function(ev) {
+              $("#shhlack_add").click();
+            });
             qs("#shhlack_add").addEventListener("click", function(ev) {
               $("#shhlack_add_form").toggle();
             });
@@ -686,6 +728,7 @@ ts_tip_hidden" tabindex="-1">
       border:1px solid #e8e8e8;
       margin-bottom:-1px
     }
+
     #shhlack_icon{
       background:
             url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAIRgAACEYBqLsIiQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAOWSURBVFiF7ZZdaJtlFMd/53neJGvTpaluxnZTUXAf2upQtOBV0IHsonPIvNAbvy0qqCB6qR2I4JVeyJjDVdGyYdVdKIKyC4dWBmXzq1hdZR/OWmfn2tm1TU3yPseLJDVL27xvanbngYckz/nn//8/J+85eURVqTVEJA2kgbuAjUAvMK6qPTWTqWroVRT9E9Aqa19NnDWIdwUIl6/PgUjdDBRPXinwXFn+VqCnElNPA+XET1bBNQDjZdie/2yg4mSBp6qsVj0M+GHJljD9SDWsCdEoJcxICGwpTpe9XxuGPEzsCwtU1V1hsbUYuCjxvwGvWlJE1pd93CQiDyxDY33V7BJtdAOFaRd29IZZj4aeA8DHdRYvrXWVWlIUvCBEZH4zsW0zN7e2B9Y5M3UEe+57Lo1YEiZPayyKERgYmuWrodkSbIdW/GVXfQYAWu7ZQsc1m0nFk7iKnIrg47jCE25MrOLa79qZMw3ENI86h4pAn5QbWBCBBkThxN9jpBqTqIAKWAxJ47iuyeOmZBzPKLgc09HVRLOTBaMiJZtV+UO14fDoCBilLWq4rcXjsVSUjrOneP3xJ3j4vgfZs/ttbCRCtG37heZDcAdWYIUnxJtXcNXKWba3tJI3lp+HjnJHOk3e+QB8+Ml+jgweZufuXWR/eRPjeziTCzh7IQIrcHXrJaxeGSOTP0/OWMQoL7/0yrx4Kd55rw/nHBppxnnTIaRDGlBbeO0fHyaCxfcd4i1eXOMpXtsziDaU7Vb/IUKP4qgzfHTmKNZYup/qXpBv33A9AN7aLqz7t/iLtfmyDPgoJ+emUKdETYS+3rfmc6nmy9jx9AsFQTOD37wJEVCnqPWXoqzNgAEOnjmOL47ffxzjs94D87nLkymyZAs4jeM1dZAZUab6Zpjpn6nKG9gFAFYL/e9bw6G/TrP1oS5iiRjvDuwFoPP2Trru30pmz5fYs47ZnaOcz42jStk8WKYBQ0FcAazw6eQx0vE1bLn7Tl6deI2RA4fobrmFcxtexMtANqJYbcQza8j5v6EBwyDUJPSLJNGcMjz5B9nRY/D1r9z7wSRmrA0Gh8kLOAPiAzaP1SvJMRZEH2zAOiFvFO/EBNNfHCf3/rf0Nx1km78Kp644dhd8i0ZvI3P5ASRgGgUa+OH5N8h9cwobiaJ5H4ywd3KCn2yCBR1W2hABfLJ+jEF/rrrAEveB/Vyc+0B72AtJJ/W/ET27mNY/HfuhjpQIYpMAAAAASUVORK5CYII=)
@@ -705,7 +748,7 @@ ts_tip_hidden" tabindex="-1">
       display: none;
      }
 
-    #shhlack_eye{
+    #shhlack_eye, #shhlack_add_label{
       cursor: pointer;
     }
 
@@ -797,7 +840,7 @@ ts_tip_hidden" tabindex="-1">
                 </div>
          </div>
               <div class="row-fluid padding_25">
-                <span>
+                <span id="shhlack_add_label">
                   Add new passphrase
                 </span>
                 <!-- ADD -->
@@ -856,12 +899,8 @@ ts_tip_hidden" tabindex="-1">
     var qs = targetEl.querySelector.bind(targetEl);
     var qsall = targetEl.querySelectorAll.bind(targetEl);
 
-    if (passes.getCurrentKey() == undefined || passes.getKeys().length === 0) {
-      alert("No passphrases in database, define at least one");
-      setTimeout(function() {
-        launchDialog(1)
-      }, 2000);
-    }
+    maybeChangeShhlackIcon();
+
     var container_el = qs("#shhlack_container");
     var currentKey = passes.getCurrentKey();
     if (!container_el) {
