@@ -11,7 +11,25 @@ LINUX_DEFAULT_LOCATION="/usr/lib/slack/resources/"
 
 FULLSLACKPATH=$1
 
+SHHLACK_HOME="$HOME/.shhlack/"
+
+SHHLACK_PACKAGE="./package.json"
+SHHLACK_FILE="./shhlack.js"
+SHHLACK_PATCHER_FILE="./patch.js"
+
 RELATIVE_FILE="app.asar.unpacked/src/static/ssb-interop.js"
+
+# Creates shhlack home dir if it does not exists.
+if [ ! -d "$SHHLACK_HOME" ]
+  then
+    echo "Creating $SHHLACK_HOME"
+    mkdir "$SHHLACK_HOME"
+fi
+
+# Copying shhlack.js and package.json to shhlack home dir
+    echo "Copying files to $SHHLACK_HOME"
+cp -f $SHHLACK_FILE $SHHLACK_HOME
+cp -f $SHHLACK_PACKAGE $SHHLACK_HOME
 
 case "$(uname -s)" in
 
@@ -60,7 +78,7 @@ then
     echo "Creating backup copy $PRELOAD_FILE.bak of the original"
     sudo cp -f $PRELOAD_FILE "$PRELOAD_FILE.bak"
     echo "Patching $PRELOAD_FILE"
-    cat ./shhlack.js | sudo tee -a $PRELOAD_FILE > /dev/null
+    cat $SHHLACK_PATCHER_FILE | sudo tee -a $PRELOAD_FILE > /dev/null
   fi
 else
     echo "Can't find $PRELOAD_FILE"
