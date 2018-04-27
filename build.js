@@ -89,7 +89,9 @@ copyFolderRecursiveSync(SRC_EXTENSION_DIR,BUILD_DIR);
 copyFolderRecursiveSync(SRC_STANDALONE_DIR,BUILD_DIR);
 
 copyFileSync(path.join(__dirname, "package.json"), BUILD_STANDALONE_DIR);
+copyFileSync(path.join(__dirname, "patch.js"), BUILD_STANDALONE_DIR);
 copyFileSync(path.join(__dirname, "README.md"), BUILD_STANDALONE_DIR);
+
 copyFileSync(path.join(__dirname, "README.md"), BUILD_EXTENSION_DIR);
 
 fs.writeFileSync(path.join(BUILD_EXTENSION_DIR, "shhlack.js"), extension_template.replace(PLACEHOLDER, shhlack_patch));
