@@ -5,7 +5,7 @@ FILE /usr/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
 (function() {
   try {
 
-    const branch = "feature/standaloneupdater";
+    const branch = "master";
     const versionURL = `https://raw.githubusercontent.com/mindedsecurity/shhlack/${branch}/release/standalone/package.json`;
     const updateURL = `https://raw.githubusercontent.com/mindedsecurity/shhlack/${branch}/release/standalone/shhlack.js`;
     const os = require('os');
