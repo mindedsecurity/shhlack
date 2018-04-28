@@ -1,6 +1,6 @@
 {
   "name": "shhlack",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Shhlack is an encryptor/decryptor for peer to peer messages in Slack.It relies on pre shared keys between the peers so only the peers with the right passphrase will be able to see the encrypted message.",
   "main": "build.js",
   "directories": {
