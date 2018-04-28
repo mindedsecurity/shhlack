@@ -6,13 +6,13 @@ const PLACEHOLDER = '@@SHHLACK_PLACEHOLDER@@'
 
 const CURRENT_DIR = __dirname;
 
-const TEMP_DIR =path.join(CURRENT_DIR,  "temp");
-
 const SRC_DIR = path.join(CURRENT_DIR, "src");
 const SRC_EXTENSION_DIR = path.join(SRC_DIR, "extension");
 const SRC_STANDALONE_DIR = path.join(SRC_DIR, "standalone");
 
 const BUILD_DIR = path.join(CURRENT_DIR, "build");
+
+const RELEASE_DIR = path.join(CURRENT_DIR, "release");
 
 const BUILD_EXTENSION_DIR = path.join(BUILD_DIR, "extension");
 const BUILD_STANDALONE_DIR = path.join(BUILD_DIR, "standalone");
@@ -85,11 +85,9 @@ function copyFolderRecursiveSync(source, target) {
 
 ////////////////////////////////////////////////////////
 
-copyFolderRecursiveSync(SRC_EXTENSION_DIR,BUILD_DIR);
-copyFolderRecursiveSync(SRC_STANDALONE_DIR,BUILD_DIR);
-
+copyFolderRecursiveSync(SRC_EXTENSION_DIR, BUILD_DIR);
+copyFolderRecursiveSync(SRC_STANDALONE_DIR, BUILD_DIR);
 copyFileSync(path.join(__dirname, "package.json"), BUILD_STANDALONE_DIR);
-copyFileSync(path.join(__dirname, "patch.js"), BUILD_STANDALONE_DIR);
 copyFileSync(path.join(__dirname, "README.md"), BUILD_STANDALONE_DIR);
 
 copyFileSync(path.join(__dirname, "README.md"), BUILD_EXTENSION_DIR);
@@ -97,8 +95,7 @@ copyFileSync(path.join(__dirname, "README.md"), BUILD_EXTENSION_DIR);
 fs.writeFileSync(path.join(BUILD_EXTENSION_DIR, "shhlack.js"), extension_template.replace(PLACEHOLDER, shhlack_patch));
 fs.writeFileSync(path.join(BUILD_STANDALONE_DIR, "shhlack.js"), standalone_template.replace(PLACEHOLDER, shhlack_patch));
 
-// mkdir dist
-// mkdir build
-// rsync -av --exclude 'build' --exclude '/.gitignore' --exclude 'build.sh' --exclude '.git' . dist/
-// google-chrome  --pack-extension=`pwd`/dist
-// mv dist.crx build/
+if (process.argv[2] === '--release'){
+  copyFolderRecursiveSync(BUILD_EXTENSION_DIR, RELEASE_DIR);
+  copyFolderRecursiveSync(BUILD_STANDALONE_DIR, RELEASE_DIR);
+}
