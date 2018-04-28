@@ -16,8 +16,8 @@ FILE /usr/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
     const shhlackHomePath = path.join(os.homedir(), '.shhlack');
     //Read Shhlack.js
     const shhlackPath = path.join(shhlackHomePath, 'shhlack.js');
-    const data = fs.readFileSync(shhlackPath) + '';
-    eval(data);
+    const shhlackJS_content = fs.readFileSync(shhlackPath) + '';
+    eval(shhlackJS_content);
 
     //Read package.json to get version
     const shhlackPackagePath = path.join(shhlackHomePath, 'package.json');
@@ -42,7 +42,7 @@ FILE /usr/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
 
     function httpget(url, onend, onerror, ondata, onresponse) {
       https.get(url, (resp) => {
-        let data = '';
+        var data = '';
         if (onresponse)
           onresponse(resp);
 
@@ -72,17 +72,46 @@ FILE /usr/lib/slack/resources/app.asar.unpacked/src/static/ssb-interop.js
       try {
         var remote_version = JSON.parse(data).version;
         var downloadfile;
-        if (cmpVersions(remote_version, local_shhlackPackage.version) > 0) {
+        var remote_version_array = remote_version.split('.');
+        var local_version_array = local_shhlackPackage.version.split('.');
+
+        var major_version = remote_version_array[0] !== local_version_array[0];
+        var minor_version = remote_version_array[1] !== local_version_array[1];
+        var patch_version = remote_version_array[2] !== local_version_array[2];
+        
+        // Expecting that if minor or major version change the patcher needs update.
+        // so user will have to download and install the whole package again
+        if (minor_version || major_version) {
+          alert(`Shhlack: New standalone version available ${remote_version} go to 
+            https://github.com/mindedsecurity/shhlack/releases/download/${remote_version}/standalone-${remote_version}.zip`);
+          return;
+        }
+        /*else if difference is on patch version only we'll 
+         just download download the new version on 
+         ~/.shhlack/package_new.json 
+        and 
+          ~/.shhlack/shhlack_new.json 
+        */
+        if (patch_version) {
           console.log("Shhlack: New Version Available! Do you want to download and install the new version?");
           localStorage.shhlack_new_version = {
             version: local_shhlackPackage.version,
             new_version: remote_version
           };
+
           httpget(updateURL,
             function onend() {
               try {
-                downloadfile.end();
-                fs.writeFileSync(path.join(shhlackHomePath, "package_new.json"), data);
+                downloadfile.end(function() {
+                  fs.writeFileSync(path.join(shhlackHomePath, "package_new.json"), data);
+                  var response = confirm("Shhlack: New version downloaded, do you want to install it?");
+                  if (response) {
+                    fs.writeFileSync(shhlackPackagePath, fs.readFileSync(path.join(shhlackHomePath, "package_new.json")));
+                    console.log(shhlackPath, path.join(shhlackHomePath, "shhlack_new.js"), fs.readFileSync(path.join(shhlackHomePath, "shhlack_new.js")) + '')
+                    fs.writeFileSync(shhlackPath, fs.readFileSync(path.join(shhlackHomePath, "shhlack_new.js")) + '');
+                  }
+                });
+
               } catch (exc) {
                 console.error(exc);
                 setError({
