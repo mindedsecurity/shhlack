@@ -70,9 +70,12 @@ then
         if [ "$OVERWRITE" == "y" ]
           then
            sudo cp -f "$PRELOAD_FILE.bak" $PRELOAD_FILE
+           echo "Patching $PRELOAD_FILE"
+           cat $SHHLACK_PATCHER_FILE | sudo tee -a $PRELOAD_FILE > /dev/null
         fi
       else # No original backup was found, you're on your own
         echo "$PRELOAD_FILE is already patched but no bakup was found, I guess you'll have to do it by hand"
+        exit 1
     fi
   else # Not patched, let's create a copy and patch it
     echo "Creating backup copy $PRELOAD_FILE.bak of the original"
