@@ -3,7 +3,21 @@ setlocal
 set OLDDIR=%cd%
 rem cd /d %~dp0
 
+SET SHHLACK_HOME=%USERPROFILE%\.shhlack
+SET SHHLACK_PACKAGE=package.json
+SET SHHLACK_FILE=shhlack.js
+SET SHHLACK_PATCHER_FILE=patch.js
+
 SET WIN_DEFAULT_LOCATION=%LOCALAPPDATA%\slack
+
+rem Creates SHHLACK home Directory
+if not exist %SHHLACK_HOME%\NUL (
+  mkdir %SHHLACK_HOME%
+)
+
+rem Copy package.json and shhlack.js
+xcopy /Y %~dp0%SHHLACK_PACKAGE% %SHHLACK_HOME%
+xcopy /Y %~dp0%SHHLACK_FILE% %SHHLACK_HOME%
 
 rem Check for default location
 if exist %WIN_DEFAULT_LOCATION% (
@@ -31,7 +45,7 @@ rem OK, Not Patched
   @echo on
   @echo "Patching file ssb-interop.js"
   @echo off
-  type %~dp0\shhlack.js >> ssb-interop.js
+  type %~dp0%SHHLACK_PATCHER_FILE% >> ssb-interop.js
 goto done
 ) else (
     @echo on
