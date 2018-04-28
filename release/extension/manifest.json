@@ -1,0 +1,45 @@
+{
+  "manifest_version": 2,
+  "name":"Shhlack",
+  "short_name": "Shhlack",
+  "description": "Shhlack is an encryptor/decryptor to improve privacy in peer to peer messages in Slack. Created by Minded Security.",
+  "version":"1.0.8",
+  "icons": { 
+    "16":"images/logo_32.png",
+    "32":"images/logo_32.png",
+    "48":"images/logo_32.png",
+    "64":"images/logo_32.png"
+  },
+  "background" : {
+    "scripts" : ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "shhlack.js",
+        "injector.js"
+      ],
+      "matches": [
+        "https://*.slack.com/*",
+        "http://*.slack.com/*"
+      ],
+      "all_frames": true,
+      "match_about_blank": true,
+      "run_at": "document_start"
+    }
+  ],  
+  "permissions": [
+          "tabs",
+          "https://*.slack.com/*",
+          "http://*.slack.com/*"
+   ],
+  "browser_action": {
+      "default_icon": { 
+    "16":"images/logo_32.png",
+    "32":"images/logo_32.png",
+    "48":"images/logo_32.png",
+    "64":"images/logo_32.png"
+    },
+    "default_title": "Shhlack!"
+  }
+}
