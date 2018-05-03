@@ -65,7 +65,7 @@ then
   then #Already patched
     if [ -e "$PRELOAD_FILE.bak" ] #Look for original backup
       then
-        echo "Already Patched, Do you want to repatch the original?(y/n): "
+        echo "Already patched. Do you want to repatch the original?(y/n): "
         read OVERWRITE
         if [ "$OVERWRITE" == "y" ]
           then
@@ -74,7 +74,7 @@ then
            cat $SHHLACK_PATCHER_FILE | sudo tee -a $PRELOAD_FILE > /dev/null
         fi
       else # No original backup was found, you're on your own
-        echo "$PRELOAD_FILE is already patched but no bakup was found, I guess you'll have to do it by hand"
+        echo "$PRELOAD_FILE is already patched but no back-up was found. Patching must be done manually."
         exit 1
     fi
   else # Not patched, let's create a copy and patch it
