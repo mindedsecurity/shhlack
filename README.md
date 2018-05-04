@@ -1,3 +1,7 @@
+# WARNING
+**This is an experimental and ongoing project. You can fork it, install it, play with it, but it's surely not ready for real use. So use it with grain of salt!**
+
+
 # Shhlack
 Shhlack is an encryptor/decryptor to improve privacy in peer-to-peer messages in Slack created by  <a href="http://www.mindedsecurity.com" target="_new">Minded Security</a>.
 It relies on pre-shared keys between the peers so only the peers with the right passphrase will be able to see the encrypted message. 
